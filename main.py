@@ -43,7 +43,7 @@ with open(file_path, "r") as file:
 imdb = GetMovie(api_key=f'{OMDB_API}')
 
 # Get the list of all files and directories
-PATHS = ["P:\\tv.shows", "P:\\tv.kids", "P:\\tv.docs"]
+PATHS = ["P:\\movies", "P:\\disney", "P:\\documentaries", "P:\\hallmark"]
 for PATH in PATHS:
     FOLDERS = os.listdir(PATH)
     for FOLDER in FOLDERS:
@@ -58,4 +58,5 @@ for PATH in PATHS:
                 print(f"Working: '{PATH}\\{FOLDER}' --> '{PATH}\\{OUTPUT}'")
                 #os.rename(f'{PATH}\\{FOLDER}', f'{PATH}\\{OUTPUT}')
             except TypeError:
-                print(f"Encountered error on: {FOLDER}")
+                #print(f"Encountered error on: {FOLDER_NAME}")
+                print('',end='')
