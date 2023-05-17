@@ -43,20 +43,29 @@ with open(file_path, "r") as file:
 imdb = GetMovie(api_key=f'{OMDB_API}')
 
 # Get the list of all files and directories
-PATHS = ["P:\\movies", "P:\\disney", "P:\\documentaries", "P:\\hallmark"]
+PATHS = ["P:\\disney"]
 for PATH in PATHS:
     FOLDERS = os.listdir(PATH)
     for FOLDER in FOLDERS:
         if '{' not in FOLDER or '}' not in FOLDER:
-            FOLDER_NAME = re.sub(r'\.?\d{4}\.?$', '', FOLDER).replace('.', ' ').replace('- ', ' - ')
+            FOLDER_NAME = FOLDER.replace('.', ' ').replace('- ', ' - ')
             # Search the Open Movie Database
             try:
                 IMDB_SEARCH = imdb.get_movie(title=f'{FOLDER_NAME}')
-                IMDB_SEARCH_YEAR = str(IMDB_SEARCH['year'])
-                IMDB_YEAR = re.match(r"^([0-9]{4})(.*)", IMDB_SEARCH_YEAR).group(1)
-                OUTPUT = (f"{IMDB_SEARCH['title']} ({IMDB_YEAR}) %%imdb-{IMDB_SEARCH['imdbid']}@@").replace('%%', '{').replace('@@', '}').replace(':', ' - ').replace('  ', ' ').replace('*', '-').replace('?', '')
-                print(f"Working: '{PATH}\\{FOLDER}' --> '{PATH}\\{OUTPUT}'")
-                #os.rename(f'{PATH}\\{FOLDER}', f'{PATH}\\{OUTPUT}')
+                if IMDB_SEARCH:
+                    IMDB_SEARCH_YEAR = str(IMDB_SEARCH['year'])
+                    if IMDB_SEARCH_YEAR:
+                        IMDB_YEAR = re.match(r"^([0-9]{4})(.*)", IMDB_SEARCH_YEAR).group(1)
+                        if IMDB_YEAR:
+                            OUTPUT = (f"{IMDB_SEARCH['title']} ({IMDB_YEAR}) %%imdb-{IMDB_SEARCH['imdbid']}@@").replace('%%', '{').replace('@@', '}').replace(':', ' - ').replace('  ', ' ').replace('*', '-').replace('?', '')
+                            print(f"Working: '{PATH}\\{FOLDER}' --> '{PATH}\\{OUTPUT}'")
+                            #os.rename(f'{PATH}\\{FOLDER}', f'{PATH}\\{OUTPUT}')
+                        else:
+                            print('Failed to find a YEAR match')
+                    else:
+                        print('Failed to SEARCH for YEAR in FOLDER')
+                else:
+                    print(f"Failed to find a match for '{FOLDER_NAME}'")
             except TypeError:
                 #print(f"Encountered error on: {FOLDER_NAME}")
                 print('',end='')
