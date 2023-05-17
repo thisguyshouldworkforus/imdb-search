@@ -44,7 +44,7 @@ with open(pin_file_path, "r") as file:
 print(f"TVDB Pin: {TVDB_PIN}")
 print(f"TVDB API: {TVDB_API}")
 
-tvdb = tvdb_v4_official.TVDB(apikey=TVDB_API)
+tvdb = tvdb_v4_official.TVDB(TVDB_API)
 
 # IMDB ID for TV Show '1883'
 tvdb.search_by_remote_id(remoteid='tt13991232')
