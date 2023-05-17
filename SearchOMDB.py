@@ -21,7 +21,7 @@
 # https://github.com/thisguyshouldworkforus/imdb-search
 #
 # Dependency:
-# PyMovieDb
+# OMDB API
 #
 # Description:
 # See README.md
@@ -40,10 +40,10 @@ with open(file_path, "r") as file:
             OMDB_API = line.strip()
 
 # Instantiate the class
-imdb = GetMovie(api_key=f'{OMDB_API}')
+omdb = GetMovie(api_key=f'{OMDB_API}')
 
 # Get the list of all files and directories
-PATHS = ["P:\\disney"]
+PATHS = ["P:\\movies", "P:\\disney", "P:\\documentaries", "P:\\hallmark"]
 for PATH in PATHS:
     FOLDERS = os.listdir(PATH)
     for FOLDER in FOLDERS:
@@ -51,13 +51,13 @@ for PATH in PATHS:
             FOLDER_NAME = FOLDER.replace('.', ' ').replace('- ', ' - ')
             # Search the Open Movie Database
             try:
-                IMDB_SEARCH = imdb.get_movie(title=f'{FOLDER_NAME}')
-                if IMDB_SEARCH:
-                    IMDB_SEARCH_YEAR = str(IMDB_SEARCH['year'])
-                    if IMDB_SEARCH_YEAR:
-                        IMDB_YEAR = re.match(r"^([0-9]{4})(.*)", IMDB_SEARCH_YEAR).group(1)
-                        if IMDB_YEAR:
-                            OUTPUT = (f"{IMDB_SEARCH['title']} ({IMDB_YEAR}) %%imdb-{IMDB_SEARCH['imdbid']}@@").replace('%%', '{').replace('@@', '}').replace(':', ' - ').replace('  ', ' ').replace('*', '-').replace('?', '')
+                OMDB_SEARCH = omdb.get_movie(title=f'{FOLDER_NAME}')
+                if OMDB_SEARCH:
+                    OMDB_SEARCH_YEAR = str(OMDB_SEARCH['year'])
+                    if OMDB_SEARCH_YEAR:
+                        OMDB_YEAR = re.match(r"^([0-9]{4})(.*)", OMDB_SEARCH_YEAR).group(1)
+                        if OMDB_YEAR:
+                            OUTPUT = (f"{OMDB_SEARCH['title']} ({OMDB_YEAR}) %%imdb-{OMDB_SEARCH['imdbid']}@@").replace('%%', '{').replace('@@', '}').replace(':', ' - ').replace('  ', ' ').replace('*', '-').replace('?', '')
                             print(f"Working: '{PATH}\\{FOLDER}' --> '{PATH}\\{OUTPUT}'")
                             #os.rename(f'{PATH}\\{FOLDER}', f'{PATH}\\{OUTPUT}')
                         else:
